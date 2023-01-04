@@ -17,11 +17,24 @@ jobs:
       env: # enviroment variables for this image
         env_var1: bla bla bla
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.fgk39hm.mongodb.net/?retryWrites=true&w=majority
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      # MONGODB_CONNECTION_PROTOCOL: mongodb+srv
+      # MONGODB_CLUSTER_ADDRESS: cluster0.fgk39hm.mongodb.net/?retryWrites=true&w=majority
+      # MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      # MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      #the protocol to connect to this container only required mongodb, not mongodb+srv as the Atlas service
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      # mongodb is the address of the service container, which is added by docker in the docker network (this works because the job is execute inside a container, so both the job container and the service container are in the same docker network)
+      MONGODB_CLUSTER_ADDRESS: mongodb
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: example
       PORT: 8080
+    services: # allow to configure extra images to act as services needed by this job.
+      mongodb: #id of the service I am adding to this job
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
+
     steps:
       - name: Get Code
         uses: actions/checkout@v3
