@@ -11,6 +11,11 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
+    # container: node:16
+    container:
+      image: node:16
+      env: # enviroment variables for this image
+        env_var1: bla bla bla
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb+srv
       MONGODB_CLUSTER_ADDRESS: cluster0.fgk39hm.mongodb.net/?retryWrites=true&w=majority
